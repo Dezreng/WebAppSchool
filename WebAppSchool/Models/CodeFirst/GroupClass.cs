@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAppSchool.Models.CodeFirst
 {
-    public class TheClass
+    public class GroupClass
     {
         [Key]
         public int Id { get; set; }
@@ -30,5 +30,6 @@ namespace WebAppSchool.Models.CodeFirst
 
         public ICollection<Student> Students { get; set; }
 
+        public ICollection<Shedule> Shedules { get; set; }
     }
 }

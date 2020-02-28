@@ -6,26 +6,21 @@ using System.Threading.Tasks;
 
 namespace WebAppSchool.Models.CodeFirst
 {
-    public class Position
+    public class Subject
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
         [MaxLength(25)]
-        public string TitlePosition { get; set; }
-
-        [Required]
-        public int Salary { get; set; }
+        public string TitleSubject { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string Responsibilities { get; set; }
+        public string Description { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string Requirements { get; set; }
+        public ICollection<ClassJournal> ClassJournals { get; set; }
 
-        public ICollection<Teacher> Teachers { get; set; }
+        public ICollection<Shedule> Shedules { get; set; }
     }
 }

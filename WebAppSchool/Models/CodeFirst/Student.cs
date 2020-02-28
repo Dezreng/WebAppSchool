@@ -35,8 +35,10 @@ namespace WebAppSchool.Models.CodeFirst
         [MaxLength(100)]
         public string AddInformation { get; set; }
 
-        public int ClassId { get; set; }
+        public int GroupClassId { get; set; }
 
-        public TheClass Class { get; set; }
+        public GroupClass GroupClass { get; set; }
+
+        public ICollection<ClassJournal> ClassJournals { get; set; }
     }
 }

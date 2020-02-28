@@ -34,6 +34,8 @@ namespace WebAppSchool.Models.CodeFirst
         [Required]
         public int PositionId { get; set; }
 
-        public Position position { get; set; }
+        public Position Position { get; set; }
+
+        public ICollection<Shedule> Shedules { get; set; }
     }
 }
