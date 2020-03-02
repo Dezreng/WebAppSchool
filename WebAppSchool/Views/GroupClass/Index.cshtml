@@ -1,0 +1,39 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.GroupClass>
+@{
+    ViewData["Title"] = "Список классов";
+}
+
+<h2>Список классов</h2>
+
+<div>
+    @Html.ActionLink("Добавить класс", "Create")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>Классный руководитель</th>
+                <th>Количество студентов</th>
+                <th>Буква</th>
+                <th>Год обучения</th>
+                <th>Год создания</th>
+                <th colspan="2"></th>
+            </tr>
+            @foreach(var classes in Model)
+            {
+                <tr>
+                    <td>@classes.Id</td>
+                    <td>@classes.ClassRoomTeacher</td>
+                    <td>@classes.NumberStudents</td>
+                    <td>@classes.Letter</td>
+                    <td>@classes.YearStudy</td>
+                    <td>@classes.YearCreation</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

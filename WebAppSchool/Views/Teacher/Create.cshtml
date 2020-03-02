@@ -1,0 +1,62 @@
+﻿@model WebAppSchool.Models.CodeFirst.Teacher
+@{
+    ViewData["Title"] = "Добавить учителя";
+}
+
+<h2>Добавить учителя</h2>
+<div>
+    @Html.ActionLink("Список учителей", "Index")
+</div>
+<div class="row">
+    @Html.ValidationSummary(true)
+    <div class="col-md-6">
+        <form method="post">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>ФИО учителя</th>
+                    <td>
+                        @Html.EditorFor(m => m.FioTeacher)
+                        @Html.ValidationMessageFor(m => m.FioTeacher)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Пол</th>
+                    <td>
+                        @Html.EditorFor(m => m.Gender)
+                        @Html.ValidationMessageFor(m => m.Gender)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Адрес</th>
+                    <td>
+                        @Html.EditorFor(m => m.Address)
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Телефон</th>
+                    <td>
+                        @Html.EditorFor(m => m.Telephone)
+                        @Html.ValidationMessageFor(m => m.Telephone)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Пасспорт</th>
+                    <td>
+                        @Html.EditorFor(m => m.Passport)
+                        @Html.ValidationMessageFor(m => m.Passport)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Должность</th>
+                    <td>
+                        @Html.DropDownListFor(m => m.PositionId, ViewBag.Positions as SelectList)
+                        @Html.ValidationMessageFor(m => m.FioTeacher)
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Добавить учителя" />
+        </form>
+    </div>
+</div>
+

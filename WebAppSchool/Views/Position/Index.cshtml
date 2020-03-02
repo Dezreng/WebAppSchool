@@ -1,0 +1,36 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Position>
+@{
+    ViewData["Title"] = "Список должностей";
+}
+
+<h2>Список должностей</h2>
+<div>
+    @Html.ActionLink("Добавить должность", "Create")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>Название должности</th>
+                <th>Оклад</th>
+                <th>Требования</th>
+                <th>Обязанности</th>
+                <th colspan="2">Функции</th>
+            </tr>
+            @foreach (var position in Model)
+            {
+                <tr>
+                    <td>@position.Id</td>
+                    <td>@position.TitlePosition</td>
+                    <td>@position.Salary</td>
+                    <td>@position.Responsibilities</td>
+                    <td>@position.Requirements</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { position.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { position.Id })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Shedule>
+@{
+    ViewData["Title"] = "Расписание занятий";
+}
+
+<h2>Расписание занятий</h2>
+<div>
+    @Html.ActionLink("Добавить расписание", "Create")
+    @Html.ActionLink("Список расписаний", "Index")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>День недели</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+                <th>Предмет</th>
+                <th>Учитель</th>
+                <th>Класс</th>
+                <th colspan="2"></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Date</td>
+                    <td>@item.DayOfWeek</td>
+                    <td>@item.TimeStart</td>
+                    <td>@item.TimeEnd</td>
+                    <td>@item.Subject.TitleSubject</td>
+                    <td>@item.Teacher.FioTeacher</td>
+                    <td>@item.GroupClass.Letter</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

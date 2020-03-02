@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.ClassJournal>
+@{
+    ViewData["Title"] = "Список журналов";
+}
+
+<h2>Список журналов</h2>
+
+<div>
+    @Html.ActionLink("Добавить", "Create")
+    @Html.ActionLink("Список журналов", "Index")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>Оценка</th>
+                <th>Дата</th>
+                <th>Присутствие</th>
+                <th>Ученик</th>
+                <th>Предмет</th>
+                <th colspan="2"></th>
+            </tr>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Mark</td>
+                    <td>@item.Date</td>
+                    <td>@item.Presence</td>
+                    <td>@item.Student.FioStudent</td>
+                    <td>@item.Subject.TitleSubject</td>
+                    <td>@Html.ActionLink("Редактировать","Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить","Delete", new { item.Id })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

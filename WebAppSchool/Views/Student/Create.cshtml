@@ -1,0 +1,86 @@
+﻿@model WebAppSchool.Models.CodeFirst.Student
+
+@{
+    ViewData["Title"] = "Добавление студента";
+}
+
+<h2>Добавление студента</h2>
+
+<div>
+    @Html.ActionLink("Список студентов", "Index")
+</div>
+
+<div class="row">
+    @Html.ValidationSummary(true)
+    <div class="col-md-6">
+        <form method="post">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>
+                        ФИО студента
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.FioStudent)
+                        @Html.ValidationMessageFor(m => m.FioStudent)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Пол
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.Gender)
+                        @Html.ValidationMessageFor(m => m.Gender)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Адрес
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.Address)
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        ФИО Отца
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.FioFather)
+                        @Html.ValidationMessageFor(m => m.FioFather)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        ФИО матери
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.FioMother)
+                        @Html.ValidationMessageFor(m => m.FioMother)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Дополнительная информация
+                    </th>
+                    <td>
+                        @Html.EditorFor(m => m.AddInformation)
+                        @Html.ValidationMessageFor(m => m.AddInformation)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Класс
+                    </th>
+                    <td>
+                        @Html.DropDownListFor(m => m.GroupClassId, ViewBag.GroupClasses as SelectList)
+                        @Html.ValidationMessageFor(m => m.GroupClassId)
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Добавить" />
+        </form>
+    </div>
+</div>
+

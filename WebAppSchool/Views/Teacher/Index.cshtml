@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Teacher>
+@{
+    ViewData["Title"] = "Список учителей";
+}
+
+<h2>Список учителей</h2>
+
+<div>
+    @Html.ActionLink("Добавить учителя", "Create")
+    @Html.ActionLink("Список учителей", "Index")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>#</th>
+                <th>ФИО</th>
+                <th>Пол</th>
+                <th>Адрес</th>
+                <th>Телефон</th>
+                <th>Паспорт</th>
+                <th>Должность</th>
+                <th colspan="2"></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.FioTeacher</td>
+                    <td>@item.Gender</td>
+                    <td>@item.Address</td>
+                    <td>@item.Telephone</td>
+                    <td>@item.Passport</td>
+                    <td>@item.Position.TitlePosition</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

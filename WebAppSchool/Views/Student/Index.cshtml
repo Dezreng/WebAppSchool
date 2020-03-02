@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Student>
+
+@{
+    ViewData["Title"] = "Список студентов";
+}
+
+<h2>Список студентов</h2>
+
+<div>
+    @Html.ActionLink("Добавить студента", "Create")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>
+                    ФИО студента
+                </th>
+                <th>
+                    Пол
+                </th>
+                <th>
+                    Адрес
+                </th>
+                <th>
+                    ФИО Отца
+                </th>
+                <th>
+                    ФИО матери
+                </th>
+                <th>
+                    Дополнительная информация
+                </th>
+                <th>
+                    Класс
+                </th>
+                <th colspan="2"></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FioStudent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FioFather)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FioMother)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AddInformation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GroupClass.ClassRoomTeacher)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Удалить", "Delete", new { item.Id })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
