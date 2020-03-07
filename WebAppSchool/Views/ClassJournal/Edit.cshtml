@@ -13,43 +13,51 @@
 <div class="row">
     @Html.ValidationSummary(true)
     <div class="col-md-6">
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th>Оценка</th>
-                <td>
-                    @Html.EditorFor(m => m.Mark)
-                    @Html.ValidationMessageFor(m => m.Mark)
-                </td>
-            </tr>
-            <tr>
-                <th>Дата</th>
-                <td>
-                    @Html.EditorFor(m => m.Date)
-                    @Html.ValidationMessageFor(m => m.Date)
-                </td>
-            </tr>
-            <tr>
-                <th>Присутствие</th>
-                <td>
-                    @Html.EditorFor(m => m.Presence)
-                    @Html.ValidationMessageFor(m => m.Presence)
-                </td>
-            </tr>
-            <tr>
-                <th>Предмет</th>
-                <td>
-                    @Html.DropDownListFor(m => m.SubjectId, ViewBag.Subjects as SelectList)
-                    @Html.ValidationMessageFor(m => m.SubjectId)
-                </td>
-            </tr>
-            <tr>
-                <th>Студент</th>
-                <td>
-                    @Html.EditorFor(m => m.StudentId, ViewBag.Students as SelectList)
-                    @Html.ValidationMessageFor(m => m.StudentId)
-                </td>
-            </tr>
-        </table>
-        <input type="submit" value="Добавить" />
+        <form method="post">
+            @Html.HiddenFor(m => m.Id)
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Оценка</th>
+                    <td>
+                        @Html.EditorFor(m => m.Mark)
+                        @Html.ValidationMessageFor(m => m.Mark)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Дата</th>
+                    <td>
+                        @Html.EditorFor(m => m.Date)
+                        @Html.ValidationMessageFor(m => m.Date)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Присутствие</th>
+                    <td>
+                        @Html.EditorFor(m => m.Presence)
+                        @Html.ValidationMessageFor(m => m.Presence)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Предмет</th>
+                    <td>
+                        @Html.DropDownListFor(m => m.SubjectId, ViewBag.Subjects as SelectList)
+                        @Html.ValidationMessageFor(m => m.SubjectId)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Студент</th>
+                    <td>
+                        @Html.DropDownListFor(m => m.StudentId, ViewBag.Students as SelectList)
+                        @Html.ValidationMessageFor(m => m.StudentId)
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Сохранить изменения" onclick="return confirm('Сохранить изменения?')" />
+        </form>
     </div>
 </div>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

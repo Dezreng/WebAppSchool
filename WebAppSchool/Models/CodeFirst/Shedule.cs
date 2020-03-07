@@ -8,26 +8,24 @@ namespace WebAppSchool.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Дата")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        [Required]
-        public int DayOfWeek { get; set; }
+        [Required(ErrorMessage ="Требуется поле: День недели")]
+        [MaxLength(15)]
+        public string DayOfWeek { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Время начала")]
         public TimeSpan TimeStart { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Время окончания")]
         public TimeSpan TimeEnd { get; set; }
 
-        [Required]
         public int TeacherId { get; set; }
 
-        [Required]
         public int GroupClassId { get; set; }
 
-        [Required]
         public int SubjectId { get; set; }
 
         public Teacher Teacher { get; set; }

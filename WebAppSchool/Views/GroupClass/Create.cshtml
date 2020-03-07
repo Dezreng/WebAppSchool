@@ -5,7 +5,9 @@
 }
 
 <h2>Добавить класс</h2>
-
+<div>
+    @Html.ActionLink("Список классов", "Index")
+</div>
 
 <div class="row">
     @Html.ValidationSummary(true)
@@ -53,5 +55,8 @@
     </div>
 </div>
 
-
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
 

@@ -8,20 +8,18 @@ namespace WebAppSchool.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Оценка")]
         public int Mark { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Дата")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Присутствие")]
         public bool Presence { get; set; }
 
-        [Required]
         public int SubjectId { get; set; }
 
-        [Required]
         public int StudentId { get; set; }
 
         public Subject Subject { get; set; }

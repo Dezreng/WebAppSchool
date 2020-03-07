@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebAppSchool.Data;
 using WebAppSchool.Models.CodeFirst;
+using X.PagedList;
 
 namespace WebAppSchool.Controllers
 {
@@ -16,11 +19,33 @@ namespace WebAppSchool.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, string searchFio, string searchTelephone, string searchPosition)
         {
-            var teachers = db.Teachers.Include(p => p.Position).ToList();
+            ViewData["searchFio"] = searchFio;
+            ViewData["searchTelephone"] = searchTelephone;
+            ViewData["searchPosition"] = searchPosition;
 
-            return View(teachers);
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+
+            IQueryable<Teacher> teachers = db.Teachers.Include(p=>p.Position);
+
+            if (!String.IsNullOrEmpty(searchFio))
+            {
+                teachers = teachers.Where(f => f.FioTeacher.Contains(searchFio));
+            }
+            if (!String.IsNullOrEmpty(searchTelephone))
+            {
+                teachers = teachers.Where(t => t.Telephone.Contains(searchTelephone));
+            }
+            if (!String.IsNullOrEmpty(searchPosition))
+            {
+                teachers = teachers.Where(p => p.Position.TitlePosition.Contains(searchPosition));
+            }
+
+            teachers = teachers.OrderBy(i => i.Id);
+
+            return View(teachers.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Create()
@@ -39,15 +64,20 @@ namespace WebAppSchool.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var teacher = db.Teachers.Find(id);
-            ViewBag.Positions = new SelectList(db.Positions, "Id", "TitlePosition");
+            if (id.HasValue)
+            {
+                var teacher = db.Teachers.Find(id);
+                ViewBag.Positions = new SelectList(db.Positions, "Id", "TitlePosition");
 
-            return View(teacher);
+                return View(teacher);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -59,7 +89,24 @@ namespace WebAppSchool.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                var teacher = db.Teachers.Find(id);
+
+                if (teacher != null)
+                {
+
+                    db.Teachers.Remove(teacher);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

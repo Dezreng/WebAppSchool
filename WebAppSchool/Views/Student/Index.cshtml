@@ -1,5 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Student>
-
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.Student>
 @{
     ViewData["Title"] = "Список студентов";
 }
@@ -10,62 +11,60 @@
     @Html.ActionLink("Добавить студента", "Create")
 </div>
 
+<div>
+    <form>
+        <p>
+            ФИО студента
+            <input type="text" name="searchFioStudent" value="@ViewData["searchFioStudent"]" />
+            ФИО матери
+            <input type="text" name="searchFioMother" value="@ViewData["searchFioMother"]" />
+            ФИО отца
+            <input type="text" name="searchFioFather" value="@ViewData["searchFioFather"]" />
+            Адрес
+            <input type="text" name="searchAddress" value="@ViewData["searchAddress"]" />
+            <input type="submit" value="Фильтровать" />
+        </p>
+    </form>
+</div>
+
 <div class="row">
     <div class="col-md-10">
         <table class="table table-bordered table-hover">
             <tr>
-                <th>
-                    ФИО студента
-                </th>
-                <th>
-                    Пол
-                </th>
-                <th>
-                    Адрес
-                </th>
-                <th>
-                    ФИО Отца
-                </th>
-                <th>
-                    ФИО матери
-                </th>
-                <th>
-                    Дополнительная информация
-                </th>
-                <th>
-                    Класс
-                </th>
+                <th>#</th>
+                <th>ФИО студента</th>
+                <th>Пол</th>
+                <th>Адрес</th>
+                <th>ФИО Отца</th>
+                <th>ФИО матери</th>
+                <th>Дополнительная информация</th>
+                <th>Класс</th>
                 <th colspan="2"></th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FioStudent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FioFather)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FioMother)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddInformation)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GroupClass.ClassRoomTeacher)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Удалить", "Delete", new { item.Id })
-                    </td>
+                    <td>@item.Id</td>
+                    <td>@item.FioStudent</td>
+                    <td>@item.Gender</td>
+                    <td>@item.Address</td>
+                    <td>@item.FioFather</td>
+                    <td>@item.FioMother</td>
+                    <td>@item.AddInformation</td>
+                    <td>@item.GroupClass.Letter@item.GroupClass.YearStudy</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+page = page,
+searchFioStudent = ViewData["searchFioStudent"],
+searchFioMother = ViewData["searchFioMother"],
+searchFioFather = ViewData["searchFioFather"],
+searchAddress = ViewData["searchAddress"]
+}))

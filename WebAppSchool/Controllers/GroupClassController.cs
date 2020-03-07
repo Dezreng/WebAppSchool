@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using WebAppSchool.Data;
 using WebAppSchool.Models.CodeFirst;
+using X.PagedList;
 
 namespace WebAppSchool.Controllers
 {
@@ -14,10 +16,27 @@ namespace WebAppSchool.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, string searchTeacher, int? searchYearCreation)
         {
-            var group = db.GroupClasses.ToList();
-            return View(group);
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+            ViewData["searchTeacher"] = searchTeacher;
+            ViewData["searchYearCreation"] = searchYearCreation;
+
+            IQueryable<GroupClass> groupClasses = db.GroupClasses;
+
+            if (!String.IsNullOrEmpty(searchTeacher))
+            {
+                groupClasses = groupClasses.Where(t => t.ClassRoomTeacher.Contains(searchTeacher));
+            }
+            if (searchYearCreation.HasValue)
+            {
+                groupClasses = groupClasses.Where(y => y.YearCreation == searchYearCreation);
+            }
+
+            groupClasses = groupClasses.OrderBy(i => i.Id);
+
+            return View(groupClasses.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Create()
@@ -37,13 +56,16 @@ namespace WebAppSchool.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var group = db.GroupClasses.Find(id);
-
-            if (group != null)
+            if (id.HasValue)
             {
-                return View(group);
+                var group = db.GroupClasses.Find(id);
+
+                if (group != null)
+                {
+                    return View(group);
+                }
             }
 
             return RedirectToAction(nameof(Index));
@@ -56,6 +78,22 @@ namespace WebAppSchool.Controllers
             {
                 db.GroupClasses.Update(groupClass);
                 db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                var groupClass = db.GroupClasses.Find(id);
+
+                if (groupClass != null)
+                {
+                    db.GroupClasses.Remove(groupClass);
+                    db.SaveChanges();
+                }
             }
 
             return RedirectToAction(nameof(Index));

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.GroupClass>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.GroupClass>
 @{
     ViewData["Title"] = "Список классов";
 }
@@ -7,6 +9,19 @@
 
 <div>
     @Html.ActionLink("Добавить класс", "Create")
+    @Html.ActionLink("Список классов", "Index")
+</div>
+
+<div>
+    <form>
+        <p>
+            ФИО классного руководителя
+            <input type="text" name="searchTeacher" value="@ViewData["searchTeacher"]" />
+            Год оздания
+            <input type="text" name="searchYearCreation" value="@ViewData["searchYearCreation"]" />
+            <input type="submit" value="Фильтровать" />
+        </p>
+    </form>
 </div>
 
 <div class="row">
@@ -21,19 +36,26 @@
                 <th>Год создания</th>
                 <th colspan="2"></th>
             </tr>
-            @foreach(var classes in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@classes.Id</td>
-                    <td>@classes.ClassRoomTeacher</td>
-                    <td>@classes.NumberStudents</td>
-                    <td>@classes.Letter</td>
-                    <td>@classes.YearStudy</td>
-                    <td>@classes.YearCreation</td>
-                    <td></td>
-                    <td></td>
+                    <td>@item.Id</td>
+                    <td>@item.ClassRoomTeacher</td>
+                    <td>@item.NumberStudents</td>
+                    <td>@item.Letter</td>
+                    <td>@item.YearStudy</td>
+                    <td>@item.YearCreation</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchTeacher = ViewData["searchTeacher"],
+    searchYearCreation = ViewData["searchYearCreation"],
+}))

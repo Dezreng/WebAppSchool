@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Teacher>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.Teacher>
 @{
     ViewData["Title"] = "Список учителей";
 }
@@ -8,6 +10,22 @@
 <div>
     @Html.ActionLink("Добавить учителя", "Create")
     @Html.ActionLink("Список учителей", "Index")
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <form>
+            <p>
+                ФИО учителя
+                <input type="text" name="searchFio" value="@ViewData["searchFio"]" />
+                Телефон
+                <input type="text" name="searchTelephone" value="@ViewData["searchTelephone"]" />
+                Должность
+                <input type="text" name="searchPosition" value="@ViewData["searchPosition"]" />
+                <input type="submit" value="Фильтровать" />
+            </p>
+        </form>
+    </div>
 </div>
 
 <div class="row">
@@ -34,9 +52,17 @@
                     <td>@item.Passport</td>
                     <td>@item.Position.TitlePosition</td>
                     <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
-                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchFio = ViewData["searchFio"],
+    searchTelephone = ViewData["searchTelephone"],
+    searchPosition = ViewData["searchPosition"]
+}))

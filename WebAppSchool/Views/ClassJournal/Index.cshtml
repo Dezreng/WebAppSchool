@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.ClassJournal>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.ClassJournal>
 @{
     ViewData["Title"] = "Список журналов";
 }
@@ -6,8 +8,22 @@
 <h2>Список журналов</h2>
 
 <div>
-    @Html.ActionLink("Добавить", "Create")
+    @Html.ActionLink("Добавить журнал", "Create")
     @Html.ActionLink("Список журналов", "Index")
+</div>
+
+<div>
+    <form>
+        <p>
+            Дата занятий
+            <input type="date" name="searchDate" value="@String.Format("{0:yyyy-MM-dd}",ViewData["searchDate"])" />
+            Предмет
+            <input type="text" name="searchSubject" value="@ViewData["searchSubject"]" />
+            ФИО ученика
+            <input type="text" name="searchStudent" value="@ViewData["searchStudent"]" />
+            <input type="submit" value="Фильтровать" />
+        </p>
+    </form>
 </div>
 
 <div class="row">
@@ -22,19 +38,27 @@
                 <th>Предмет</th>
                 <th colspan="2"></th>
             </tr>
-            @foreach(var item in Model)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Mark</td>
-                    <td>@item.Date</td>
-                    <td>@item.Presence</td>
+                    <td>@String.Format("{0:dd.MM.yyyy}", item.Date)</td>
+                    <td>@(item.Presence ? "Да" : "Нет")</td>
                     <td>@item.Student.FioStudent</td>
                     <td>@item.Subject.TitleSubject</td>
-                    <td>@Html.ActionLink("Редактировать","Edit", new { item.Id })</td>
-                    <td>@Html.ActionLink("Удалить","Delete", new { item.Id })</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchDate = ViewData["searchDate"],
+    searchSubject = ViewData["searchSubject"],
+    searchStudent = ViewData["searchStudent"]
+}))

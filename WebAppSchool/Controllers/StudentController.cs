@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAppSchool.Data;
 using WebAppSchool.Models.CodeFirst;
+using X.PagedList;
 
 namespace WebAppSchool.Controllers
 {
@@ -17,10 +19,38 @@ namespace WebAppSchool.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, string searchFioStudent, string searchFioMother,
+                                    string searchFioFather, string searchAddress)
         {
-            var students = db.Students.Include(s => s.GroupClass).ToList();
-            return View(students);
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+
+            ViewData["searchFioStudent"] = searchFioStudent;
+            ViewData["searchFioMother"] = searchFioMother;
+            ViewData["searchFioFather"] = searchFioFather;
+            ViewData["searchAddress"] = searchAddress;
+
+            IQueryable<Student> students = db.Students.Include(s => s.GroupClass);
+
+            if (!String.IsNullOrEmpty(searchFioStudent))
+            {
+                students = students.Where(s => s.FioStudent.Contains(searchFioStudent));
+            }
+            if (!String.IsNullOrEmpty(searchFioMother))
+            {
+                students = students.Where(m => m.FioMother.Contains(searchFioMother));
+            }
+            if (!String.IsNullOrEmpty(searchFioFather))
+            {
+                students = students.Where(f => f.FioFather.Contains(searchFioFather));
+            }
+            if (!String.IsNullOrEmpty(searchAddress))
+            {
+                students = students.Where(a => a.Address.Contains(searchAddress));
+            }
+
+            students = students.OrderBy(i => i.Id);
+            return View(students.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Create()
@@ -36,34 +66,52 @@ namespace WebAppSchool.Controllers
             {
                 db.Add(student);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction("Create");
+            return RedirectToAction(nameof(Create));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var student = db.Students.Find(id);
-            if (student == null)
+            if (id.HasValue)
             {
-                return NotFound();
+                var student = db.Students.Find(id);
+                ViewBag.GroupClasses = new SelectList(db.GroupClasses, "Id", "ClassRoomTeacher");
+
+                return View(student);
             }
-            ViewBag.GroupClasses = new SelectList(db.GroupClasses, "Id", "ClassRoomTeacher");
-            return View(student);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
         public IActionResult Edit(Student student)
         {
-
             if (ModelState.IsValid)
             {
                 db.Students.Update(student);
-                return RedirectToAction("Index");
+                db.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
 
-            return View("Edit");
+            return View(nameof(Edit));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                var student = db.Students.Find(id);
+
+                if (student != null)
+                {
+                    db.Students.Remove(student);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -218,6 +218,7 @@ namespace WebAppSchool.Data
 
         public static Shedule[] CreateShedules(int count)
         {
+            string[] dayOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
             Random random = new Random();
             Shedule[] shedules = new Shedule[count];
 
@@ -230,7 +231,7 @@ namespace WebAppSchool.Data
                 {
                     Id = i + 1,
                     Date = GenerateDateTime(),
-                    DayOfWeek = random.Next(1, 7),
+                    DayOfWeek = dayOfWeek[random.Next(0, dayOfWeek.Length)],
                     TimeStart = timeStart,
                     TimeEnd = timeEnd,
                     TeacherId = random.Next(1, count),
@@ -252,9 +253,9 @@ namespace WebAppSchool.Data
                 classJournals[i] = new ClassJournal
                 {
                     Id = i + 1,
-                    Mark = random.Next(1, 10),
+                    Mark = random.Next(1, 11),
                     Date = GenerateDateTime(),
-                    Presence = random.Next(0, 1) == 0 ? false : true,
+                    Presence = random.Next(0, 100) < 50 ? true : false,
                     SubjectId = random.Next(1, count),
                     StudentId = random.Next(1, count)
                 };

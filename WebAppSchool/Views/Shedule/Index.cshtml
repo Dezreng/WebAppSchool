@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Shedule>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.Shedule>
 @{
     ViewData["Title"] = "Расписание занятий";
 }
@@ -7,6 +9,20 @@
 <div>
     @Html.ActionLink("Добавить расписание", "Create")
     @Html.ActionLink("Список расписаний", "Index")
+</div>
+
+<div>
+    <form>
+        <p>
+            Дата занятий
+            <input type="date" name="searchDate" value="@String.Format("{0:yyyy-MM-dd}",ViewData["searchDate"])" />
+            Класс
+            @Html.DropDownList("SearchClass", (IEnumerable<SelectListItem>)ViewBag.GroupClasses)
+            ФИО предподавателя
+            @Html.CheckBox("SearchTeacher")
+            <input type="submit" value="Фильтровать" />
+        </p>
+    </form>
 </div>
 
 <div class="row">
@@ -27,17 +43,25 @@
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td>@item.Date</td>
+                    <td>@String.Format("{0:dd.MM.yyyy}", item.Date)</td>
                     <td>@item.DayOfWeek</td>
                     <td>@item.TimeStart</td>
                     <td>@item.TimeEnd</td>
                     <td>@item.Subject.TitleSubject</td>
                     <td>@item.Teacher.FioTeacher</td>
-                    <td>@item.GroupClass.Letter</td>
+                    <td>@item.GroupClass.YearStudy@item.GroupClass.Letter</td>
                     <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
-                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchDate = ViewData["searchDate"],
+    searchClass = ViewData["searchClass"],
+    searchTeacher = ViewData["searchTeacher"]
+}))

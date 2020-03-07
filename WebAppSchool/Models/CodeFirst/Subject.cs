@@ -8,11 +8,11 @@ namespace WebAppSchool.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Название предмета")]
         [MaxLength(25)]
         public string TitleSubject { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Описание предмета")]
         [MaxLength(100)]
         public string Description { get; set; }
 

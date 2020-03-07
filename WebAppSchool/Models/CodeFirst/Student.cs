@@ -8,27 +8,27 @@ namespace WebAppSchool.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: ФИО студента")]
         [MaxLength(100)]
         public string FioStudent { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Пол")]
         [MaxLength(10)]
         public string Gender { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Адрес")]
         [MaxLength(100)]
         public string Address { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: ФИО отца")]
         [MaxLength(100)]
         public string FioFather { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: ФИО матери")]
         [MaxLength(100)]
         public string FioMother { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Доп. информация")]
         [MaxLength(100)]
         public string AddInformation { get; set; }
 

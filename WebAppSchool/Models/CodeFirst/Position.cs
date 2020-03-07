@@ -8,18 +8,18 @@ namespace WebAppSchool.Models.CodeFirst
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Название должности")]
         [MaxLength(25)]
         public string TitlePosition { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Оклад")]
         public int Salary { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Требования")]
         [MaxLength(100)]
         public string Responsibilities { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Требуется поле: Обязанности")]
         [MaxLength(100)]
         public string Requirements { get; set; }
 

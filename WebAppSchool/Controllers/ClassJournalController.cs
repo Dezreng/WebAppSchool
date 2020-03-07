@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using WebAppSchool.Data;
 using WebAppSchool.Models.CodeFirst;
+using X.PagedList;
 
 namespace WebAppSchool.Controllers
 {
@@ -16,10 +18,32 @@ namespace WebAppSchool.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, DateTime? searchDate, string searchSubject, string searchStudent)
         {
-            var classJournals = db.ClassJournals.Include(st => st.Student).Include(su => su.Subject).ToList();
-            return View(classJournals);
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+
+            ViewData["searchDate"] = searchDate;
+            ViewData["searchSubject"] = searchSubject;
+            ViewData["searchStudent"] = searchStudent;
+
+            IQueryable<ClassJournal> classJournals = db.ClassJournals.Include(st => st.Student).Include(su => su.Subject);
+
+            if (searchDate.HasValue)
+            {
+                classJournals = classJournals.Where(d => d.Date == searchDate);
+            }
+            if (!String.IsNullOrEmpty(searchSubject))
+            {
+                classJournals = classJournals.Where(s => s.Subject.TitleSubject.Contains(searchSubject));
+            }
+            if (!String.IsNullOrEmpty(searchStudent))
+            {
+                classJournals = classJournals.Where(s => s.Student.FioStudent.Contains(searchStudent));
+            }
+
+            classJournals = classJournals.OrderBy(i => i.Id);
+            return View(classJournals.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Create()
@@ -42,16 +66,19 @@ namespace WebAppSchool.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var classJournal = db.ClassJournals.Find(id);
-
-            if (classJournal != null)
+            if (id.HasValue)
             {
-                ViewBag.Students = new SelectList(db.Students, "Id", "FioStudent");
-                ViewBag.Subjects = new SelectList(db.Subjects, "Id", "TitleSubject");
+                var classJournal = db.ClassJournals.Find(id);
 
-                return View(classJournal);
+                if (classJournal != null)
+                {
+                    ViewBag.Students = new SelectList(db.Students, "Id", "FioStudent");
+                    ViewBag.Subjects = new SelectList(db.Subjects, "Id", "TitleSubject");
+
+                    return View(classJournal);
+                }
             }
 
             return RedirectToAction(nameof(Index));
@@ -64,6 +91,22 @@ namespace WebAppSchool.Controllers
             {
                 db.ClassJournals.Update(classJournal);
                 db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                var classJournal = db.ClassJournals.Find(id);
+
+                if (classJournal != null)
+                {
+                    db.ClassJournals.Remove(classJournal);
+                    db.SaveChanges();
+                }
             }
 
             return RedirectToAction(nameof(Index));

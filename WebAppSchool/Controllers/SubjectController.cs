@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using WebAppSchool.Data;
 using WebAppSchool.Models.CodeFirst;
+using X.PagedList;
 
 namespace WebAppSchool.Controllers
 {
@@ -14,10 +17,20 @@ namespace WebAppSchool.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, string searchTitle)
         {
-            var subjects = db.Subjects.ToList();
-            return View(subjects);
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+            ViewData["searchTitle"] = searchTitle;
+
+            IQueryable<Subject> subjects = db.Subjects;
+
+            if (!String.IsNullOrEmpty(searchTitle))
+            {
+                subjects = subjects.Where(t => t.TitleSubject.Contains(searchTitle));
+            }
+
+            return View(subjects.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Create()
@@ -56,6 +69,22 @@ namespace WebAppSchool.Controllers
             {
                 db.Subjects.Update(subject);
                 db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id.HasValue)
+            {
+                var subject = db.Subjects.Find(id);
+
+                if (subject != null)
+                {
+                    db.Subjects.Remove(subject);
+                    db.SaveChanges();
+                }
             }
 
             return RedirectToAction(nameof(Index));

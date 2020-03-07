@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Subject>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.Subject>
 @{
     ViewData["Title"] = "Список предметов";
 }
@@ -7,6 +9,16 @@
 <div>
     @Html.ActionLink("Добавить предмет", "Create")
     @Html.ActionLink("Список предметов", "Index")
+</div>
+
+<div>
+    <form>
+        <p>
+            Название предмета
+            <input type="text" name="searchTitle" value="@ViewData["searchTitle"]" />
+            <input type="submit" value="Филтровать" />
+        </p>
+    </form>
 </div>
 
 <div class="row">
@@ -25,10 +37,15 @@
                     <td>@item.TitleSubject</td>
                     <td>@item.Description</td>
                     <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
-                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
 
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchTitle = ViewData["searchTitle"]
+}))

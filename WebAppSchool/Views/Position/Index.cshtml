@@ -1,4 +1,6 @@
-﻿@model IEnumerable<WebAppSchool.Models.CodeFirst.Position>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<WebAppSchool.Models.CodeFirst.Position>
 @{
     ViewData["Title"] = "Список должностей";
 }
@@ -6,6 +8,17 @@
 <h2>Список должностей</h2>
 <div>
     @Html.ActionLink("Добавить должность", "Create")
+    @Html.ActionLink("Список должностей", "Delete")
+</div>
+
+<div>
+    <form>
+        <p>
+            Название должности
+            <input type="text" name="searchPosition" value="@ViewData["searchPosition"]" />
+            <input type="submit" value="Фильтровать" />
+        </p>
+    </form>
 </div>
 
 <div class="row">
@@ -19,18 +32,24 @@
                 <th>Обязанности</th>
                 <th colspan="2">Функции</th>
             </tr>
-            @foreach (var position in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@position.Id</td>
-                    <td>@position.TitlePosition</td>
-                    <td>@position.Salary</td>
-                    <td>@position.Responsibilities</td>
-                    <td>@position.Requirements</td>
-                    <td>@Html.ActionLink("Редактировать", "Edit", new { position.Id })</td>
-                    <td>@Html.ActionLink("Удалить", "Delete", new { position.Id })</td>
+                    <td>@item.Id</td>
+                    <td>@item.TitlePosition</td>
+                    <td>@item.Salary</td>
+                    <td>@item.Responsibilities</td>
+                    <td>@item.Requirements</td>
+                    <td>@Html.ActionLink("Редактировать", "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink("Удалить", "Delete", new { item.Id }, new { onclick = "return confirm('Удалить?')" })</td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page = page,
+    searchPosition = ViewData["searchPosition"]
+}))
