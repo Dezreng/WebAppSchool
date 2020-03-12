@@ -55,7 +55,11 @@ namespace WebAppSchool.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.GroupClasses = new SelectList(db.GroupClasses, "Id", "ClassRoomTeacher");
+            ViewBag.GroupClasses = new SelectList(db.GroupClasses.Select(s => new
+            {
+                Id = s.Id,
+                Class = s.YearStudy + s.Letter
+            }), "Id", "Class");
             return View();
         }
 
@@ -77,7 +81,11 @@ namespace WebAppSchool.Controllers
             if (id.HasValue)
             {
                 var student = db.Students.Find(id);
-                ViewBag.GroupClasses = new SelectList(db.GroupClasses, "Id", "ClassRoomTeacher");
+                ViewBag.GroupClasses = new SelectList(db.GroupClasses.Select(s => new
+                {
+                    Id = s.Id,
+                    Class = s.YearStudy + s.Letter
+                }), "Id", "Class");
 
                 return View(student);
             }

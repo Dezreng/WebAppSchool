@@ -67,8 +67,8 @@ namespace WebAppSchool.Data
 
         public static Teacher[] CreateTeachers(int count)
         {
-            string[] fioTeacherFem = { "Королева Лидия Ивановна", "Петрова Мария Викторовна", "Сосновская Алиса Андреевна" };
-            string[] fioTeacherMal = { "Марчук Ян Валерьевич", "Лемешенко Алексей Михайлович", "Воробьев Алексей Викторович" };
+            string[] fioTeacherFem = { "Королева Лидия Ивановна", "Петрова Мария Викторовна", "Сосновская Алиса Андреевна", "Авакян Елена Зиновьевна" };
+            string[] fioTeacherMal = { "Марчук Ян Валерьевич", "Лемешенко Алексей Михайлович", "Воробьев Алексей Викторович", "Щур Дмитрий Николаевич" }; 
             string[] address = { "Минск, ул. Минская, д. 6, кв. 7",
                                     "Рогачев. ул. Сосновая, д.3, кв. 1",
                                     "Брест, ул. Советская, д. 14, кв. 67",
@@ -94,7 +94,7 @@ namespace WebAppSchool.Data
                     PositionId = random.Next(1, count)
                 };
 
-                if (random.Next(0, 1) == 0)
+                if (random.Next(0, 100) > 50)
                 {
                     teachers[i].FioTeacher = fioTeacherFem[random.Next(0, fioTeacherFem.Length)];
                     teachers[i].Gender = "Женский";
@@ -171,7 +171,7 @@ namespace WebAppSchool.Data
                     GroupClassId = random.Next(1, count)
                 };
 
-                if (random.Next(0, 1) == 0)
+                if (random.Next(0, 100) > 50)
                 {
                     int check = random.Next(0, 3);
 

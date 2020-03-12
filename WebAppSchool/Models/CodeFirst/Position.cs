@@ -13,6 +13,7 @@ namespace WebAppSchool.Models.CodeFirst
         public string TitlePosition { get; set; }
 
         [Required(ErrorMessage ="Требуется поле: Оклад")]
+        [Range(0, int.MaxValue, ErrorMessage ="Оклад не может быть отрицательным")]
         public int Salary { get; set; }
 
         [Required(ErrorMessage ="Требуется поле: Требования")]

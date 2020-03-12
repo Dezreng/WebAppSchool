@@ -22,6 +22,7 @@ namespace WebAppSchool.Models.CodeFirst
 
         [Required(ErrorMessage ="Требуется поле: Телефон")]
         [MaxLength(12)]
+        [Range(375250000000, 375449999999, ErrorMessage ="Номер телефона неккоректен")]
         public string Telephone { get; set; }
 
         [Required(ErrorMessage ="Требуется поле: Паспорт")]
